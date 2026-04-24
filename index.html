@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>NNVS Serviço Online</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f4f7fb;
+    margin: 0;
+}
+
+header {
+    background: #0a3d62;
+    color: white;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.container {
+    padding: 20px;
+}
+
+input, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #1e90ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0c7cd5;
+}
+
+.result {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+img {
+    width: 200px;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>NNVS Serviço Online</header>
+
+<div class="container">
+
+<label>Nome do Despachante:</label>
+<input type="text" id="despachante">
+
+<label>Descrição da Mercadoria:</label>
+<textarea id="descricao" placeholder="Ex: Telefone smartphone Android"></textarea>
+
+<button onclick="classificar()">Classificar Mercadoria</button>
+
+<div class="result" id="resultado"></div>
+
+</div>
+
+<script>
+
+function classificar() {
+    let descricao = document.getElementById("descricao").value.toLowerCase();
+
+    let codigo = "";
+    let explicacao = "";
+    let imagem = "";
+
+    // Simulação de classificação
+    if (descricao.includes("telefone") || descricao.includes("smartphone")) {
+        codigo = "8517.13.00";
+        explicacao = "Classificado como aparelho telefônico para redes celulares.";
+        imagem = "https://source.unsplash.com/200x200/?smartphone";
+    }
+    else if (descricao.includes("roupa") || descricao.includes("camisa")) {
+        codigo = "6205.20.00";
+        explicacao = "Classificado como vestuário de algodão.";
+        imagem = "https://source.unsplash.com/200x200/?shirt";
+    }
+    else {
+        codigo = "0000.00.00";
+        explicacao = "Mercadoria não identificada. Necessário análise mais detalhada conforme regras do Sistema Harmonizado.";
+        imagem = "https://source.unsplash.com/200x200/?product";
+    }
+
+    document.getElementById("resultado").innerHTML = `
+        <h3>Resultado da Classificação</h3>
+        <p><strong>Código Pautal:</strong> ${codigo}</p>
+        <p><strong>Subposição:</strong> ${codigo}</p>
+        <p><strong>Justificação:</strong> ${explicacao}</p>
+        <img src="${imagem}">
+    `;
+}
+
+</script>
+
+</body>
+</html>
