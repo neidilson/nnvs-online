@@ -3,150 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NNVS Online - Sistema Inteligente Aduaneiro</title>
+    <title>NNVS Online - Inteligência Aduaneira Angola 2024</title>
     <style>
         :root {
-            --primary-bg: #000000;
-            --card-bg: #1a1a1a;
-            --accent-orange: #ff6600;
-            --text-color: #ffffff;
+            --primary: #ff6600; /* Laranja NNVS */
+            --bg: #000000;
+            --card: #121212;
+            --text: #ffffff;
+            --text-dim: #aaaaaa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         header {
-            background-color: #111;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-orange);
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 400px 1fr; /* Esquerda fixa para IA, Direita para PDF */
-            gap: 15px;
-            padding: 15px;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; overflow-y: auto; }
-            .ia-panel, .pdf-panel { height: 500px; }
-        }
-
-        .ia-panel, .pdf-panel {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .search-box {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input {
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #444;
             background: #000;
-            color: white;
-            font-size: 16px;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        button {
-            background: var(--accent-orange);
+        .dashboard {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        @media (max-width: 1000px) {
+            .dashboard { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        h3 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 5px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #444;
             color: white;
-            border: none;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-ai {
+            background: var(--primary);
+            color: black;
+            width: 100%;
             padding: 15px;
+            border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-        }
-
-        .ia-response {
-            background: #252525;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent-orange);
-            line-height: 1.6;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-            border: none;
-            background: white;
-        }
-
-        .status-tag {
-            font-size: 12px;
-            color: var(--accent-orange);
             text-transform: uppercase;
-            margin-bottom: 10px;
-            display: block;
-            font-weight: bold;
         }
+
+        /* Resultados */
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .result-card { background: #1a1a1a; padding: 15px; border-radius: 8px; border-top: 3px solid var(--primary); }
+        
+        .status-badge { padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .correct { background: var(--success); color: white; }
+        .incorrect { background: var(--danger); color: white; }
+
+        .tax-box { background: #222; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px dashed var(--primary); }
+        
+        .rgi-box { font-size: 13px; font-style: italic; color: var(--text-dim); margin-top: 10px; padding: 10px; background: #080808; }
+
+        iframe { width: 100%; height: 400px; border: none; border-radius: 8px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-size: 24px; font-weight: bold;">NNVS <span style="color: var(--accent-orange);">ONLINE</span></div>
-    <div style="font-size: 13px; color: #888;">Inteligência Aduaneira Profissional & Pauta 2024</div>
+    <div style="font-size: 26px; font-weight: bold;">NNVS <span style="color:var(--primary)">ONLINE</span></div>
+    <div style="font-size: 12px; letter-spacing: 2px;">CLASSIFICAÇÃO PAUTAL INTELIGENTE - ANGOLA 2024</div>
 </header>
 
-<div class="container">
-    <div class="ia-panel">
-        <span class="status-tag">Assistente de Classificação IA</span>
-        <div class="search-box">
-            <input type="text" id="aiInput" placeholder="Descreva a mercadoria (ex: pneus novos)...">
-            <button onclick="interpretarComIA()">INTERPRETAR MERCADORIA</button>
+<div class="dashboard">
+    <div class="panel">
+        <h3>Entrada de Mercadoria</h3>
+        <div class="form-group">
+            <label>Nome do Produto</label>
+            <input type="text" id="p_nome" placeholder="Ex: Arroz, Pneus, Vinho...">
         </div>
-        <div id="aiOutput" class="ia-response">
-            Aguardando entrada de dados para análise técnica...
+        <div class="form-group">
+            <label>Descrição Completa</label>
+            <textarea id="p_desc" rows="3"></textarea>
         </div>
+        <div class="form-group">
+            <label>Composição do Material</label>
+            <input type="text" id="p_comp" placeholder="Ex: Borracha Sintética, 100% Algodão">
+        </div>
+        <div class="form-group">
+            <label>País de Origem</label>
+            <select id="p_origem">
+                <option value="CN">China</option>
+                <option value="PT">Portugal</option>
+                <option value="ZA">África do Sul</option>
+                <option value="BR">Brasil</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Código na Fatura (Invoice Code)</label>
+            <input type="text" id="p_fatura" placeholder="0000.00.00">
+        </div>
+        <button class="btn-ai" onclick="processarIA()">Analisar com IA</button>
     </div>
 
-    <div class="pdf-panel">
-        <span class="status-tag">Consulta Oficial (Pauta 2024)</span>
-        <iframe src="pauta2024.pdf.pdf" title="Pauta Aduaneira"></iframe>
+    <div class="panel">
+        <h3>Painel de Classificação (Resultado IA)</h3>
+        
+        <div id="loading" style="display:none; text-align:center; padding: 20px;">
+            <img src="https://i.gifer.com/ZZ5H.gif" width="30"> Analisando Notas Legais da Pauta 2024...
+        </div>
+
+        <div id="resultado_ia" style="display:none;">
+            <div class="result-grid">
+                <div class="result-card">
+                    <span class="status-tag" style="color:var(--primary)">SUGESTÃO DA IA</span>
+                    <h2 id="res_codigo" style="margin:10px 0;">----.--.--</h2>
+                    <p id="res_titulo" style="font-weight:bold;"></p>
+                    <div id="res_confianca" style="color:var(--success); font-size: 14px;">Confiança: 0%</div>
+                </div>
+
+                <div class="result-card">
+                    <span class="status-tag" style="color:var(--primary)">COMPARAÇÃO COM FATURA</span>
+                    <div id="res_comparacao" style="margin-top:15px;"></div>
+                </div>
+            </div>
+
+            <div class="tax-box">
+                <h4 style="margin:0 0 10px 0; color:var(--primary)">Estimativa de Direitos (Angola 2024)</h4>
+                <div id="res_impostos">Direitos Aduaneiros: 0% | Imposto de Consumo: 0% | IVA: 14%</div>
+            </div>
+
+            <div class="panel" style="margin-top:15px; background:#080808">
+                <h4>Justificação Técnica e RGI</h4>
+                <div id="res_justificativa" class="rgi-box"></div>
+                <p id="res_tecnico" style="font-size:14px; color:var(--text-dim)"></p>
+            </div>
+
+            <h3>Visualização Técnica</h3>
+            <div id="ia_imagens" style="display:flex; gap:10px; margin-top:10px;">
+                </div>
+            
+            <iframe src="pauta2024.pdf.pdf"></iframe>
+        </div>
     </div>
 </div>
 
 <script>
-    function interpretarComIA() {
-        const query = document.getElementById('aiInput').value.toLowerCase();
-        const output = document.getElementById('aiOutput');
-        
-        output.innerHTML = "<em>Consultando base de dados da Pauta 2024...</em>";
+    function processarIA() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('resultado_ia').style.display = 'none';
 
         setTimeout(() => {
-            if(query.includes("pneu")) {
-                output.innerHTML = "<strong>Sugestão Técnica IA:</strong><br>Provável classificação no <strong>Capítulo 40</strong>.<br><br><strong>Código: 4011.10.00</strong><br>Descrição: Pneus novos de borracha, dos tipos utilizados em automóveis de passageiros.<br><br><em>Dica: Verifique as especificações de carga no PDF ao lado.</em>";
-            } else if(query.includes("arroz")) {
-                output.innerHTML = "<strong>Sugestão Técnica IA:</strong><br>Localizado no <strong>Capítulo 10</strong>.<br><br><strong>Código: 1006.30.10</strong><br>Descrição: Arroz semibranqueado ou branqueado, mesmo polido ou glaciado.<br><br><em>Dica: Consulte a página de taxas no PDF para importações em Luanda.</em>";
-            } else {
-                output.innerHTML = "<strong>Análise concluída:</strong> Para interpretar '" + query + "', recomendo consultar o índice do PDF à direita. A IA sugere verificar as Regras Gerais de Interpretação (RGI).";
+            const nome = document.getElementById('p_nome').value.toLowerCase();
+            const codFatura = document.getElementById('p_fatura').value;
+            
+            let dados = {
+                codigo: "0000.00.00",
+                titulo: "Mercadoria Não Identificada",
+                rgi: "RGI 1: Os títulos de Seções e Capítulos são apenas indicativos.",
+                just: "Análise baseada nas características gerais.",
+                direitos: "30%",
+                confianca: "45%"
+            };
+
+            if(nome.includes("pneu")) {
+                dados = {
+                    codigo: "4011.10.00",
+                    titulo: "Pneus novos de borracha para automóveis",
+                    rgi: "RGI 1 e 6: Classificado pelo texto da posição e subposição.",
+                    just: "Capítulo 40, Posição 4011. A borracha vulcanizada confere o caráter essencial.",
+                    direitos: "10%",
+                    confianca: "98%"
+                };
             }
-        }, 1200);
+
+            // Lógica de Comparação
+            let compHTML = "";
+            if(codFatura === dados.codigo) {
+                compHTML = '<span class="status-badge correct">CÓDIGO CORRETO</span><br><p>O código da fatura coincide com a Pauta 2024.</p>';
+            } else {
+                compHTML = '<span class="status-badge incorrect">POSSIVELMENTE INCORRETO</span><br><p>Fatura: '+codFatura+'<br>Sugerido: '+dados.codigo+'</p>';
+            }
+
+            // Preencher resultados
+            document.getElementById('res_codigo').innerText = dados.codigo;
+            document.getElementById('res_titulo').innerText = dados.titulo;
+            document.getElementById('res_confianca').innerText = "Grau de Confiança: " + dados.confianca;
+            document.getElementById('res_comparacao').innerHTML = compHTML;
+            document.getElementById('res_justificativa').innerText = dados.rgi;
+            document.getElementById('res_tecnico').innerText = dados.just;
+            document.getElementById('res_impostos').innerHTML = "Direitos Aduaneiros: " + dados.direitos + " | Imposto de Consumo: 2% | IVA: 14%";
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('resultado_ia').style.display = 'block';
+        }, 2000);
     }
 </script>
 
