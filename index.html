@@ -8,135 +8,97 @@
     <style>
         :root { --sidebar: #0f172a; --accent: #ff6600; --bg: #f8fafc; --white: #ffffff; }
         body { font-family: 'Inter', sans-serif; margin: 0; display: flex; background: var(--bg); height: 100vh; overflow: hidden; }
-        
         nav { width: 260px; background: var(--sidebar); color: white; padding: 20px; display: flex; flex-direction: column; }
         nav h1 { color: var(--accent); font-size: 22px; text-align: center; margin-bottom: 40px; font-weight: 900; }
         nav a { color: #94a3b8; text-decoration: none; padding: 14px; margin: 5px 0; border-radius: 8px; cursor: pointer; display: block; transition: 0.3s; }
         nav a.active { background: #1e293b; color: var(--accent); font-weight: bold; }
-
         main { flex: 1; padding: 40px; overflow-y: auto; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start; }
         .card { background: var(--white); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 8px; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f1f5f9; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: var(--sidebar); color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; }
-
         .res-header { background: var(--sidebar); color: white; padding: 25px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
         .res-code { font-size: 36px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
         .res-info-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 15px; }
         .detail-line { margin-bottom: 12px; font-size: 14px; line-height: 1.6; }
         .detail-line b { color: #64748b; text-transform: uppercase; font-size: 11px; display: block; }
         .tax-tag { background: #fff1f2; border-left: 5px solid #ef4444; padding: 15px; border-radius: 4px; margin-top: 20px; font-weight: 900; color: #b91c1c; font-size: 18px; }
-
-        #view-pauta { display: none; height: 100%; }
-        iframe { width: 100%; height: 88vh; border: none; border-radius: 12px; }
     </style>
 </head>
 <body>
 
 <nav>
     <h1>NNVS ONLINE</h1>
-    <a onclick="ir('classificar')" id="n-class" class="active">Classificar Produto</a>
-    <a onclick="ir('pauta')" id="n-pauta">Pauta Aduaneira</a>
-    <div style="margin-top: auto; font-size: 11px; color: #64748b; text-align: center;">SISTEMA OFICIAL | PAUTA 2024</div>
+    <a onclick="location.reload()" class="active">Classificar Produto</a>
+    <div style="margin-top: auto; font-size: 11px; color: #64748b; text-align: center;">SISTEMA GRATUITO</div>
 </nav>
 
-<main id="view-classificar">
+<main>
     <h2 style="margin-bottom: 30px; font-weight: 900; color: var(--sidebar);">Classificar Mercadoria</h2>
     <div class="dashboard-grid">
         <div class="card">
             <div class="form-group">
                 <label>Nome do Produto *</label>
-                <input type="text" id="in_nome" placeholder="Ex: Veículo Ligeiro">
+                <input type="text" id="in_nome" placeholder="Ex: Pneus">
             </div>
             <div class="form-group">
                 <label>Descrição Técnica</label>
-                <textarea id="in_desc" rows="3" placeholder="Detalhes como modelo, motor, etc."></textarea>
+                <textarea id="in_desc" rows="3" placeholder="Detalhes do produto..."></textarea>
             </div>
-            <div style="display: flex; gap: 15px;">
-                <div class="form-group" style="flex: 1;"><label>Composição</label><input type="text" id="in_comp" placeholder="Ex: Metal"></div>
-                <div class="form-group" style="flex: 1;"><label>Finalidade</label><input type="text" id="in_uso" placeholder="Ex: Transporte"></div>
-            </div>
-            <button class="btn-main" onclick="processarClassificacao()">CLASSIFICAR COM IA ✨</button>
+            <button class="btn-main" onclick="processar()">CLASSIFICAR COM IA ✨</button>
         </div>
 
-        <div class="card" id="painelResultados" style="display: none;">
+        <div class="card" id="painel" style="display: none;">
             <div class="res-header">
-                <div><small style="opacity: 0.8; font-weight: 700;">HS CODE SUGERIDO</small><div class="res-code" id="out_hscode">----</div></div>
-                <div style="text-align: right;"><small style="opacity: 0.8; font-weight: 700;">CONFIANÇA</small><div style="font-size: 28px; font-weight: 900;">98%</div></div>
+                <div><small>HS CODE</small><div class="res-code" id="out_hscode">----</div></div>
             </div>
-            <h3 id="out_titulo" style="margin: 25px 0 10px 0; color: var(--sidebar); border-bottom: 2px solid var(--accent); padding-bottom: 10px;">--</h3>
+            <h3 id="out_titulo" style="margin: 20px 0;">--</h3>
             <div class="res-info-box">
                 <div class="detail-line"><b>Capítulo:</b> <span id="out_cap">--</span></div>
-                <div class="detail-line"><b>Posição:</b> <span id="out_pos">--</span></div>
-                <div class="detail-line"><b>Justificação Técnica (RGI):</b> <span id="out_just">--</span></div>
+                <div class="detail-line"><b>Justificativa:</b> <span id="out_just">--</span></div>
             </div>
-            <div class="tax-tag">DIREITOS ADUANEIROS: <span id="out_taxa">0%</span></div>
+            <div class="tax-tag">TAXA: <span id="out_taxa">0%</span></div>
         </div>
     </div>
 </main>
 
-<main id="view-pauta">
-    <h2 style="margin-bottom: 20px;">Consulta Pauta 2024</h2>
-    <iframe src="pauta2024.pdf.pdf"></iframe>
-</main>
-
 <script>
-    // TUA NOVA CHAVE GRATUITA INSERIDA AQUI
-    const API_KEY = "AIzaSyDioKKTF0cQyUk9t_gM3gEJUwU7iTr8158"; 
+    // Usando a sua nova chave gratuita
+    const KEY = "AIzaSyDioKKTF0cQyUk9t_gM3gEJUwU7iTr8158";
 
-    function ir(aba) {
-        document.getElementById('view-classificar').style.display = aba === 'classificar' ? 'block' : 'none';
-        document.getElementById('view-pauta').style.display = aba === 'pauta' ? 'block' : 'none';
-        document.getElementById('n-class').className = aba === 'classificar' ? 'active' : '';
-        document.getElementById('n-pauta').className = aba === 'pauta' ? 'active' : '';
-    }
-
-    async function processarClassificacao() {
+    async function processar() {
         const nome = document.getElementById('in_nome').value;
-        const desc = document.getElementById('in_desc').value;
-        const comp = document.getElementById('in_comp').value;
-        const uso = document.getElementById('in_uso').value;
-        
-        if(!nome) { alert("Digite o nome do produto."); return; }
+        if(!nome) return alert("Digite o nome!");
 
-        const painel = document.getElementById('painelResultados');
-        painel.style.display = 'block';
-        document.getElementById('out_hscode').innerText = "Analisando...";
+        document.getElementById('painel').style.display = 'block';
+        document.getElementById('out_hscode').innerText = "A pesquisar...";
 
-        const prompt = `Aja como um perito aduaneiro angolano. Classifique a mercadoria '${nome}' estritamente pela Pauta Aduaneira de Angola 2024. Detalhes: ${desc}, ${comp}, ${uso}. 
-        Retorne APENAS um JSON: {"hscode":"","titulo_tecnico":"","capitulo":"","posicao":"","justificativa":"","taxa_importacao":""}`;
+        const prompt = `Responda apenas em JSON sobre o produto '${nome}' na Pauta Aduaneira de Angola 2024: {"hscode":"","titulo":"","capitulo":"","justificativa":"","taxa":""}`;
 
         try {
-            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
             
-            const data = await resp.json();
+            const d = await r.json();
             
-            if (data.error) {
-                document.getElementById('out_hscode').innerText = "Erro na API";
-                console.error(data.error.message);
-                return;
-            }
+            // Limpeza da resposta para evitar erro de formato JSON
+            let t = d.candidates[0].content.parts[0].text;
+            t = t.replace(/```json|```/g, "").trim();
+            const res = JSON.parse(t);
 
-            let texto = data.candidates[0].content.parts[0].text;
-            texto = texto.replace(/```json|```/g, "").trim();
-            const res = JSON.parse(texto);
-
-            document.getElementById('out_hscode').innerText = res.hscode || "N/A";
-            document.getElementById('out_titulo').innerText = res.titulo_tecnico || "N/A";
-            document.getElementById('out_cap').innerText = res.capitulo || "N/A";
-            document.getElementById('out_pos').innerText = res.posicao || "N/A";
-            document.getElementById('out_just').innerText = res.justificativa || "N/A";
-            document.getElementById('out_taxa').innerText = res.taxa_importacao || "0%";
+            document.getElementById('out_hscode').innerText = res.hscode;
+            document.getElementById('out_titulo').innerText = res.titulo;
+            document.getElementById('out_cap').innerText = res.capitulo;
+            document.getElementById('out_just').innerText = res.justificativa;
+            document.getElementById('out_taxa').innerText = res.taxa;
         } catch (e) {
-            document.getElementById('out_hscode').innerText = "Erro na Busca";
-            console.error(e);
+            document.getElementById('out_hscode').innerText = "Erro!";
+            alert("A Google bloqueou a chave por segurança. Tente novamente em 1 minuto.");
         }
     }
 </script>
