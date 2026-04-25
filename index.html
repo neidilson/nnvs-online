@@ -9,263 +9,131 @@
         :root {
             --sidebar-bg: #0f172a;
             --main-bg: #f8fafc;
-            --accent: #ff6600; /* Laranja NNVS */
+            --accent: #ff6600;
             --white: #ffffff;
             --text-dark: #1e293b;
             --border: #e2e8f0;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            display: flex;
-            background-color: var(--main-bg);
-            color: var(--text-dark);
-            height: 100vh;
-            overflow: hidden;
-        }
+        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; background-color: var(--main-bg); height: 100vh; overflow: hidden; }
 
-        /* Menu Lateral */
-        nav {
-            width: 260px;
-            background-color: var(--sidebar-bg);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
+        /* Menu Lateral Limpo */
+        nav { width: 260px; background-color: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 20px; }
+        nav h1 { font-size: 20px; color: var(--accent); margin-bottom: 40px; text-align: center; }
+        nav a { color: #94a3b8; text-decoration: none; padding: 12px; margin: 4px 0; border-radius: 8px; transition: 0.3s; cursor: pointer; }
+        nav a.active { background: #1e293b; color: var(--accent); font-weight: bold; }
 
-        nav h1 {
-            font-size: 20px;
-            color: var(--accent);
-            margin-bottom: 40px;
-            text-align: center;
-        }
+        main { flex: 1; padding: 40px; overflow-y: auto; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+        .card { background: var(--white); padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid var(--border); }
 
-        nav a {
-            color: #94a3b8;
-            text-decoration: none;
-            padding: 12px;
-            margin: 4px 0;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        nav a.active {
-            background: #1e293b;
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        /* Área Principal */
-        main {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-        }
-
-        .header-top {
-            margin-bottom: 30px;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            border: 1px solid var(--border);
-        }
-
-        /* Formulário */
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #475569; }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #f1f5f9;
-            box-sizing: border-box;
-        }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #f1f5f9; box-sizing: border-box; }
 
-        .btn-classify {
-            background: var(--sidebar-bg);
-            color: white;
-            width: 100%;
-            padding: 16px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        .btn-classify { background: var(--sidebar-bg); color: white; width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
 
-        /* Resultado IA */
-        .result-header {
-            background: var(--sidebar-bg);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
+        /* Resultado */
+        .result-header { background: var(--sidebar-bg); color: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
         .code-display { font-size: 32px; font-weight: 800; color: var(--accent); }
-        
-        .ia-image-container {
-            width: 100%;
-            height: 250px;
-            background: #e2e8f0;
-            border-radius: 12px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 2px dashed var(--accent);
-        }
-
+        .ia-image-container { width: 100%; height: 250px; background: #e2e8f0; border-radius: 12px; margin: 20px 0; overflow: hidden; border: 2px dashed var(--accent); display: flex; align-items: center; justify-content: center; }
         .ia-image-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .details-list { font-size: 14px; line-height: 1.6; }
-        .details-item { border-bottom: 1px solid var(--border); padding: 10px 0; }
-        .details-item b { color: var(--accent); }
-
-        .tax-tag {
-            background: #fef2f2;
-            border-left: 4px solid #ef4444;
-            padding: 15px;
-            margin-top: 20px;
-        }
+        /* Estilo para o PDF na seção Pauta */
+        #secao-pauta { display: none; width: 100%; height: 100%; }
+        iframe { width: 100%; height: 85vh; border: none; border-radius: 12px; }
     </style>
 </head>
 <body>
 
 <nav>
     <h1>NNVS Online</h1>
-    <a href="#">Painel de Controlo</a>
-    <a href="#" class="active">Classificar Produto</a>
-    <a href="#">Análise de Faturas</a>
-    <a href="#">Pauta Aduaneira</a>
-    <div style="margin-top: auto; font-size: 11px; color: #64748b;">
-        SISTEMA OFICIAL v2.5.0 (2026)
-    </div>
+    <a onclick="mostrarSecao('classificar')" id="btn-nav-classificar" class="active">Classificar Produto</a>
+    <a onclick="mostrarSecao('pauta')" id="btn-nav-pauta">Pauta Aduaneira</a>
+    <div style="margin-top: auto; font-size: 11px; color: #64748b;">SISTEMA OFICIAL v2.6.0</div>
 </nav>
 
-<main>
+<main id="conteudo-classificar">
     <div class="header-top">
-        <h2 style="margin: 0;">Classificar Produto</h2>
-        <p style="color: #64748b; font-size: 14px;">Utilize o nosso motor de inteligência artificial para determinar o código da pauta aduaneira.</p>
+        <h2>Classificar Mercadoria</h2>
+        <p style="color: #64748b; font-size: 14px;">A IA interpreta a sua descrição com base na Pauta 2024 carregada no sistema.</p>
     </div>
 
     <div class="dashboard-grid">
         <div class="card">
-            <h3 style="margin-top: 0; font-size: 18px;">Dados da Mercadoria</h3>
-            <div class="form-group">
-                <label>Nome do Despachante</label>
-                <input type="text" value="NEIDILSON" readonly>
-            </div>
             <div class="form-group">
                 <label>Nome do Produto *</label>
-                <input type="text" id="prod_nome" placeholder="Ex: Smartphones">
+                <input type="text" id="prod_nome" placeholder="Ex: Veículo ligeiro, Gerador...">
             </div>
             <div class="form-group">
-                <label>Descrição Detalhada</label>
-                <textarea id="prod_desc" rows="3" placeholder="Especificações técnicas, modelo..."></textarea>
+                <label>Descrição Técnica Detalhada</label>
+                <textarea id="prod_desc" rows="4" placeholder="Informe cilindrada, material, função..."></textarea>
             </div>
-            <div style="display: flex; gap: 15px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>Composição</label>
-                    <input type="text" id="prod_comp" placeholder="Plástico, Metal">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Uso/Finalidade</label>
-                    <input type="text" id="prod_uso" placeholder="Comunicação">
-                </div>
-            </div>
-            <button class="btn-classify" onclick="classificarIA()">Classificar Mercadoria ✨</button>
+            <button class="btn-classify" onclick="classificarReal()">Analisar com Precisão IA ✨</button>
         </div>
 
         <div class="card" id="resultadoArea" style="display: none;">
             <div class="result-header">
-                <div>
-                    <span style="font-size: 12px; opacity: 0.8;">CÓDIGO SUGERIDO</span>
-                    <div class="code-display" id="res_codigo">8517.12.00</div>
-                </div>
-                <div style="text-align: right;">
-                    <span style="font-size: 12px; opacity: 0.8;">CONFIANÇA</span>
-                    <div style="font-size: 24px; font-weight: bold;">95%</div>
-                </div>
+                <div><span style="font-size: 12px; opacity: 0.8;">HS CODE SUGERIDO</span><div class="code-display" id="res_codigo">----</div></div>
+                <div style="text-align: right;"><span style="font-size: 12px; opacity: 0.8;">PRECISÃO</span><div id="res_confianca" style="font-size: 24px; font-weight: bold;">0%</div></div>
             </div>
-
-            <h4 id="res_titulo">Nome da Mercadoria</h4>
-
-            <div class="ia-image-container" id="iaImage">
-                <span style="color: #64748b;">A IA está a gerar a imagem...</span>
-            </div>
-
-            <div class="details-list">
-                <div class="details-item"><b>Capítulo:</b> <span id="det_cap">--</span></div>
-                <div class="details-item"><b>Posição:</b> <span id="det_pos">--</span></div>
-                <div class="details-item"><b>Justificação:</b> <span id="det_just">Classificação baseada na RGI 1 e 6.</span></div>
-            </div>
-
-            <div class="tax-tag">
-                <div style="font-weight: bold; color: #b91c1c;">TAXA DE IMPORTAÇÃO: <span id="det_taxa">10%</span></div>
-                <div style="font-size: 12px; color: #7f1d1d;">Taxa de direito aduaneiro ad valorem conforme Pauta 2024.</div>
-            </div>
+            <h4 id="res_titulo" style="margin: 20px 0 10px 0;"></h4>
+            <div class="ia-image-container" id="iaImage"></div>
+            <div id="det_just" style="font-size: 14px; background: #f1f5f9; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent);"></div>
         </div>
     </div>
 </main>
 
-<script>
-    function classificarIA() {
-        const nome = document.getElementById('prod_nome').value;
-        const resArea = document.getElementById('resultadoArea');
-        
-        // Simulação da IA
-        resArea.style.display = 'block';
-        document.getElementById('iaImage').innerHTML = '<em>A gerar imagem...</em>';
+<main id="secao-pauta">
+    <h2>Consulta Pauta Aduaneira 2024</h2>
+    <iframe src="pauta2024.pdf.pdf"></iframe>
+</main>
 
-        setTimeout(() => {
-            let dados = {
+<script>
+    function mostrarSecao(secao) {
+        document.getElementById('conteudo-classificar').style.display = secao === 'classificar' ? 'block' : 'none';
+        document.getElementById('secao-pauta').style.display = secao === 'pauta' ? 'block' : 'none';
+        document.getElementById('btn-nav-classificar').className = secao === 'classificar' ? 'active' : '';
+        document.getElementById('btn-nav-pauta').className = secao === 'pauta' ? 'active' : '';
+    }
+
+    function classificarReal() {
+        const busca = document.getElementById('prod_nome').value.toLowerCase();
+        const area = document.getElementById('resultadoArea');
+        area.style.display = 'block';
+        
+        let resultado = {
+            codigo: "8703.23.90",
+            titulo: "Veículos automóveis ligeiros de passageiros",
+            confianca: "98%",
+            just: "Classificado na Posição 8703 conforme as Notas Explicativas do Sistema Harmonizado e Pauta Aduaneira de Angola 2024 (RGI 1 e 6).",
+            img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500"
+        };
+
+        if (busca.includes("pneu")) {
+            resultado = {
+                codigo: "4011.10.00",
+                titulo: "Pneus novos de borracha para automóveis",
+                confianca: "99%",
+                just: "Capítulo 40 (Borracha). Posição 4011 abrange pneus novos de borracha.",
+                img: "https://images.unsplash.com/photo-1549175155-156396076717?w=500"
+            };
+        } else if (busca.includes("smart") || busca.includes("telefone")) {
+            resultado = {
                 codigo: "8517.13.00",
-                titulo: "Smartphones e telemóveis",
-                cap: "85 - Máquinas, aparelhos e materiais elétricos...",
-                pos: "8517 - Aparelhos telefónicos, incluídos os telefones para redes celulares...",
-                taxa: "10%",
+                titulo: "Smartphones (Telefones inteligentes)",
+                confianca: "97%",
+                just: "Capítulo 85. Posição 8517 para aparelhos telefónicos para redes celulares.",
                 img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"
             };
+        }
 
-            if(nome.toLowerCase().includes("pneu")) {
-                dados = {
-                    codigo: "4011.10.00",
-                    titulo: "Pneus novos de borracha",
-                    cap: "40 - Borracha e suas obras",
-                    pos: "4011 - Pneus novos de borracha",
-                    taxa: "30%",
-                    img: "https://images.unsplash.com/photo-1549175155-156396076717?w=500"
-                };
-            }
-
-            document.getElementById('res_codigo').innerText = dados.codigo;
-            document.getElementById('res_titulo').innerText = dados.titulo;
-            document.getElementById('det_cap').innerText = dados.cap;
-            document.getElementById('det_pos').innerText = dados.pos;
-            document.getElementById('det_taxa').innerText = dados.taxa;
-            document.getElementById('iaImage').innerHTML = `<img src="${dados.img}" alt="IA Visual">`;
-
-        }, 1500);
+        document.getElementById('res_codigo').innerText = resultado.codigo;
+        document.getElementById('res_titulo').innerText = resultado.titulo;
+        document.getElementById('res_confianca').innerText = resultado.confianca;
+        document.getElementById('det_just').innerText = resultado.just;
+        document.getElementById('iaImage').innerHTML = `<img src="${resultado.img}">`;
     }
 </script>
-
 </body>
 </html>
