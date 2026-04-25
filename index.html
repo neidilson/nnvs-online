@@ -84,8 +84,8 @@
 </main>
 
 <script>
-    // Chave de API atualizada e corrigida
-    const API_KEY = "AIzaSyABVLYMKNC8rGQmBx8u04R4WVcrTLAxhJ0"; 
+    // TUA NOVA CHAVE GRATUITA INSERIDA AQUI
+    const API_KEY = "AIzaSyDioKKTF0cQyUk9t_gM3gEJUwU7iTr8158"; 
 
     function ir(aba) {
         document.getElementById('view-classificar').style.display = aba === 'classificar' ? 'block' : 'none';
@@ -100,7 +100,7 @@
         const comp = document.getElementById('in_comp').value;
         const uso = document.getElementById('in_uso').value;
         
-        if(!nome) { alert("Por favor, digite o nome do produto."); return; }
+        if(!nome) { alert("Digite o nome do produto."); return; }
 
         const painel = document.getElementById('painelResultados');
         painel.style.display = 'block';
@@ -118,7 +118,11 @@
             
             const data = await resp.json();
             
-            if(!data.candidates) { throw new Error("API negou o acesso. Verifique o faturamento."); }
+            if (data.error) {
+                document.getElementById('out_hscode').innerText = "Erro na API";
+                console.error(data.error.message);
+                return;
+            }
 
             let texto = data.candidates[0].content.parts[0].text;
             texto = texto.replace(/```json|```/g, "").trim();
@@ -132,7 +136,7 @@
             document.getElementById('out_taxa').innerText = res.taxa_importacao || "0%";
         } catch (e) {
             document.getElementById('out_hscode').innerText = "Erro na Busca";
-            console.error("Erro detalhado:", e);
+            console.error(e);
         }
     }
 </script>
