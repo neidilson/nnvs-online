@@ -3,250 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NNVS Online - Pauta Aduaneira 2024 com IA</title>
+    <title>NNVS Online - Sistema Inteligente Aduaneiro</title>
     <style>
         :root {
-            --primary-bg: #111111; /* Preto */
-            --secondary-bg: #222222; /* Cinza Escuro */
-            --accent-color: #ff6600; /* Laranja NNVS */
-            --text-main: #ffffff;
-            --text-secondary: #aaaaaa;
+            --primary-bg: #000000;
+            --card-bg: #1a1a1a;
+            --accent-orange: #ff6600;
+            --text-color: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--primary-bg);
+            color: var(--text-color);
             margin: 0;
-            color: var(--text-main);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         header {
-            background-color: var(--secondary-bg);
-            padding: 1.5rem;
+            background-color: #111;
+            padding: 15px;
             text-align: center;
-            border-bottom: 3px solid var(--accent-color);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-bottom: 2px solid var(--accent-orange);
         }
 
-        .company-name {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--text-main);
-            letter-spacing: 1px;
-        }
-        .company-name span {
-            color: var(--accent-color);
-        }
-
-        .main-content {
+        .container {
+            display: grid;
+            grid-template-columns: 400px 1fr; /* Esquerda fixa para IA, Direita para PDF */
+            gap: 15px;
+            padding: 15px;
             flex: 1;
-            max-width: 900px;
-            margin: 30px auto;
-            width: 90%;
-            padding: 20px;
+            overflow: hidden;
         }
 
-        .search-container {
-            background-color: var(--secondary-bg);
-            padding: 25px;
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; overflow-y: auto; }
+            .ia-panel, .pdf-panel { height: 500px; }
+        }
+
+        .ia-panel, .pdf-panel {
+            background: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            text-align: center;
+            padding: 20px;
             border: 1px solid #333;
-        }
-
-        .search-title {
-            color: var(--accent-color);
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 22px;
+            display: flex;
+            flex-direction: column;
         }
 
         .search-box {
             display: flex;
+            flex-direction: column;
             gap: 10px;
+            margin-bottom: 20px;
         }
 
-        input[type="text"] {
-            flex: 1;
+        input {
             padding: 15px;
-            border: 2px solid #333;
             border-radius: 8px;
-            font-size: 16px;
-            background-color: #1a1a1a;
+            border: 1px solid #444;
+            background: #000;
             color: white;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
+            font-size: 16px;
         }
 
         button {
-            background-color: var(--accent-color);
+            background: var(--accent-orange);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px;
             border-radius: 8px;
-            cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
-            transition: transform 0.2s, background-color 0.2s;
+            cursor: pointer;
         }
 
-        button:hover {
-            background-color: #e65c00;
-        }
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .results-container {
-            margin-top: 30px;
-            display: none; /* Escondido até pesquisar */
-        }
-
-        .pauta-card {
-            background-color: var(--secondary-bg);
-            border-left: 5px solid var(--accent-color);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .ia-image-area {
-            width: 150px;
-            height: 150px;
-            background-color: #333;
+        .ia-response {
+            background: #252525;
+            padding: 15px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 12px;
-            overflow: hidden;
-            border: 2px solid var(--accent-color);
+            border-left: 4px solid var(--accent-orange);
+            line-height: 1.6;
+            flex: 1;
+            overflow-y: auto;
         }
-        
-        .ia-image-area img {
+
+        iframe {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            border-radius: 8px;
+            border: none;
+            background: white;
         }
 
-        .pauta-details {
-            flex: 1;
-        }
-
-        .code-tag {
-            background-color: #333;
-            color: var(--accent-color);
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-family: monospace;
+        .status-tag {
+            font-size: 12px;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
             font-weight: bold;
-            font-size: 18px;
-        }
-
-        footer {
-            background-color: var(--secondary-bg);
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #333;
-            color: var(--text-secondary);
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="company-name">NNVS <span>Online</span></div>
-    <p style="color: var(--text-secondary); margin: 5px 0 0;">Gestão Aduaneira & Classificação 2024</p>
+    <div style="font-size: 24px; font-weight: bold;">NNVS <span style="color: var(--accent-orange);">ONLINE</span></div>
+    <div style="font-size: 13px; color: #888;">Inteligência Aduaneira Profissional & Pauta 2024</div>
 </header>
 
-<div class="main-content">
-    <div class="search-container">
-        <h3 class="search-title">Pesquisa Inteligente na Pauta Aduaneira (com IA)</h3>
+<div class="container">
+    <div class="ia-panel">
+        <span class="status-tag">Assistente de Classificação IA</span>
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Digite o produto (ex: arroz, carro, telefone)...">
-            <button onclick="simularPesquisa()">PESQUISAR</button>
+            <input type="text" id="aiInput" placeholder="Descreva a mercadoria (ex: pneus novos)...">
+            <button onclick="interpretarComIA()">INTERPRETAR MERCADORIA</button>
+        </div>
+        <div id="aiOutput" class="ia-response">
+            Aguardando entrada de dados para análise técnica...
         </div>
     </div>
 
-    <div class="results-container" id="resultsArea">
-        <div class="pauta-card">
-            <div class="ia-image-area" id="iaImage">
-                </div>
-            <div class="pauta-details">
-                <h3><span class="code-tag" id="pautaCode">----</span></h3>
-                <h4 style="color: white; margin-bottom: 5px;" id="pautaTitle">Descrição do Produto</h4>
-                <p style="color: var(--text-secondary); margin-top: 0; font-size: 14px;" id="pautaDesc">
-                    Aguardando pesquisa...
-                </p>
-            </div>
-        </div>
+    <div class="pdf-panel">
+        <span class="status-tag">Consulta Oficial (Pauta 2024)</span>
+        <iframe src="pauta2024.pdf.pdf" title="Pauta Aduaneira"></iframe>
     </div>
 </div>
 
-<footer>
-    &copy; 2026 NNVS Online. Sistema de Apoio ao Despachante - Dados baseados na Pauta Aduaneira de 2024.
-</footer>
-
 <script>
-    // Banco de dados simulado da Pauta 2024 com links de imagens de exemplo
-    const database2024 = {
-        "arroz": {
-            code: "1006.30.10",
-            title: "Arroz Semibranqueado ou Branqueado",
-            desc: "Pauta 2024 - Arroz de grão longo, polido. Verifique taxas específicas da AGT.",
-            imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=400&auto=format&fit=crop"
-        },
-        "carro": {
-            code: "8703.23.10",
-            title: "Automóveis de Passageiros (Gasolina)",
-            desc: "Pauta 2024 - Cilindrada superior a 1500cm³ mas não superior a 3000cm³.",
-            imgUrl: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop"
-        },
-        "telefone": {
-            code: "8517.13.00",
-            title: "Smartphones (Telefones para redes celulares)",
-            desc: "Pauta 2024 - Aparelhos emissores/receptores de dados. Isento de direitos em certas condições.",
-            imgUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=400&auto=format&fit=crop"
-        }
-    };
+    function interpretarComIA() {
+        const query = document.getElementById('aiInput').value.toLowerCase();
+        const output = document.getElementById('aiOutput');
+        
+        output.innerHTML = "<em>Consultando base de dados da Pauta 2024...</em>";
 
-    function simularPesquisa() {
-        const input = document.getElementById('searchInput').value.toLowerCase().trim();
-        const resultsArea = document.getElementById('resultsArea');
-        const pautaCode = document.getElementById('pautaCode');
-        const pautaTitle = document.getElementById('pautaTitle');
-        const pautaDesc = document.getElementById('pautaDesc');
-        const iaImageArea = document.getElementById('iaImage');
-
-        if (input in database2024) {
-            const item = database2024[input];
-            resultsArea.style.display = 'block';
-            pautaCode.innerText = item.code;
-            pautaTitle.innerText = item.title;
-            pautaDesc.innerText = item.desc;
-            iaImageArea.innerHTML = `<img src="${item.imgUrl}" alt="Imagem gerada pela IA para ${input}">`;
-        } else if (input === "") {
-             resultsArea.style.display = 'none';
-        } else {
-            resultsArea.style.display = 'block';
-            pautaCode.innerText = "NÃO ENCONTRADO";
-            pautaTitle.innerText = "Produto não cadastrado no protótipo";
-            pautaDesc.innerText = "No sistema real, a IA tentaria classificar '"+input+"' baseada nas regras gerais de interpretação.";
-            iaImageArea.innerHTML = "<div>Sem Imagem</div>";
-        }
+        setTimeout(() => {
+            if(query.includes("pneu")) {
+                output.innerHTML = "<strong>Sugestão Técnica IA:</strong><br>Provável classificação no <strong>Capítulo 40</strong>.<br><br><strong>Código: 4011.10.00</strong><br>Descrição: Pneus novos de borracha, dos tipos utilizados em automóveis de passageiros.<br><br><em>Dica: Verifique as especificações de carga no PDF ao lado.</em>";
+            } else if(query.includes("arroz")) {
+                output.innerHTML = "<strong>Sugestão Técnica IA:</strong><br>Localizado no <strong>Capítulo 10</strong>.<br><br><strong>Código: 1006.30.10</strong><br>Descrição: Arroz semibranqueado ou branqueado, mesmo polido ou glaciado.<br><br><em>Dica: Consulte a página de taxas no PDF para importações em Luanda.</em>";
+            } else {
+                output.innerHTML = "<strong>Análise concluída:</strong> Para interpretar '" + query + "', recomendo consultar o índice do PDF à direita. A IA sugere verificar as Regras Gerais de Interpretação (RGI).";
+            }
+        }, 1200);
     }
 </script>
 
