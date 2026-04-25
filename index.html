@@ -1,113 +1,253 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
-<title>NNVS Serviço Online</title>
-<style>
-body {
-    font-family: Arial;
-    background: #f4f7fb;
-    margin: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NNVS Online - Pauta Aduaneira 2024 com IA</title>
+    <style>
+        :root {
+            --primary-bg: #111111; /* Preto */
+            --secondary-bg: #222222; /* Cinza Escuro */
+            --accent-color: #ff6600; /* Laranja NNVS */
+            --text-main: #ffffff;
+            --text-secondary: #aaaaaa;
+        }
 
-header {
-    background: #0a3d62;
-    color: white;
-    padding: 15px;
-    font-size: 20px;
-    font-weight: bold;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-.container {
-    padding: 20px;
-}
+        header {
+            background-color: var(--secondary-bg);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
 
-input, textarea, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+        .company-name span {
+            color: var(--accent-color);
+        }
 
-button {
-    background: #1e90ff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
+        .main-content {
+            flex: 1;
+            max-width: 900px;
+            margin: 30px auto;
+            width: 90%;
+            padding: 20px;
+        }
 
-button:hover {
-    background: #0c7cd5;
-}
+        .search-container {
+            background-color: var(--secondary-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 1px solid #333;
+        }
 
-.result {
-    margin-top: 20px;
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-}
+        .search-title {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
 
-img {
-    width: 200px;
-    margin-top: 10px;
-}
-</style>
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #1a1a1a;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #e65c00;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .results-container {
+            margin-top: 30px;
+            display: none; /* Escondido até pesquisar */
+        }
+
+        .pauta-card {
+            background-color: var(--secondary-bg);
+            border-left: 5px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .ia-image-area {
+            width: 150px;
+            height: 150px;
+            background-color: #333;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            overflow: hidden;
+            border: 2px solid var(--accent-color);
+        }
+        
+        .ia-image-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pauta-details {
+            flex: 1;
+        }
+
+        .code-tag {
+            background-color: #333;
+            color: var(--accent-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #333;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>NNVS Serviço Online</header>
+<header>
+    <div class="company-name">NNVS <span>Online</span></div>
+    <p style="color: var(--text-secondary); margin: 5px 0 0;">Gestão Aduaneira & Classificação 2024</p>
+</header>
 
-<div class="container">
+<div class="main-content">
+    <div class="search-container">
+        <h3 class="search-title">Pesquisa Inteligente na Pauta Aduaneira (com IA)</h3>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Digite o produto (ex: arroz, carro, telefone)...">
+            <button onclick="simularPesquisa()">PESQUISAR</button>
+        </div>
+    </div>
 
-<label>Nome do Despachante:</label>
-<input type="text" id="despachante">
-
-<label>Descrição da Mercadoria:</label>
-<textarea id="descricao" placeholder="Ex: Telefone smartphone Android"></textarea>
-
-<button onclick="classificar()">Classificar Mercadoria</button>
-
-<div class="result" id="resultado"></div>
-
+    <div class="results-container" id="resultsArea">
+        <div class="pauta-card">
+            <div class="ia-image-area" id="iaImage">
+                </div>
+            <div class="pauta-details">
+                <h3><span class="code-tag" id="pautaCode">----</span></h3>
+                <h4 style="color: white; margin-bottom: 5px;" id="pautaTitle">Descrição do Produto</h4>
+                <p style="color: var(--text-secondary); margin-top: 0; font-size: 14px;" id="pautaDesc">
+                    Aguardando pesquisa...
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
+<footer>
+    &copy; 2026 NNVS Online. Sistema de Apoio ao Despachante - Dados baseados na Pauta Aduaneira de 2024.
+</footer>
+
 <script>
+    // Banco de dados simulado da Pauta 2024 com links de imagens de exemplo
+    const database2024 = {
+        "arroz": {
+            code: "1006.30.10",
+            title: "Arroz Semibranqueado ou Branqueado",
+            desc: "Pauta 2024 - Arroz de grão longo, polido. Verifique taxas específicas da AGT.",
+            imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=400&auto=format&fit=crop"
+        },
+        "carro": {
+            code: "8703.23.10",
+            title: "Automóveis de Passageiros (Gasolina)",
+            desc: "Pauta 2024 - Cilindrada superior a 1500cm³ mas não superior a 3000cm³.",
+            imgUrl: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=400&auto=format&fit=crop"
+        },
+        "telefone": {
+            code: "8517.13.00",
+            title: "Smartphones (Telefones para redes celulares)",
+            desc: "Pauta 2024 - Aparelhos emissores/receptores de dados. Isento de direitos em certas condições.",
+            imgUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=400&auto=format&fit=crop"
+        }
+    };
 
-function classificar() {
-    let descricao = document.getElementById("descricao").value.toLowerCase();
+    function simularPesquisa() {
+        const input = document.getElementById('searchInput').value.toLowerCase().trim();
+        const resultsArea = document.getElementById('resultsArea');
+        const pautaCode = document.getElementById('pautaCode');
+        const pautaTitle = document.getElementById('pautaTitle');
+        const pautaDesc = document.getElementById('pautaDesc');
+        const iaImageArea = document.getElementById('iaImage');
 
-    let codigo = "";
-    let explicacao = "";
-    let imagem = "";
-
-    // Simulação de classificação
-    if (descricao.includes("telefone") || descricao.includes("smartphone")) {
-        codigo = "8517.13.00";
-        explicacao = "Classificado como aparelho telefônico para redes celulares.";
-        imagem = "https://source.unsplash.com/200x200/?smartphone";
+        if (input in database2024) {
+            const item = database2024[input];
+            resultsArea.style.display = 'block';
+            pautaCode.innerText = item.code;
+            pautaTitle.innerText = item.title;
+            pautaDesc.innerText = item.desc;
+            iaImageArea.innerHTML = `<img src="${item.imgUrl}" alt="Imagem gerada pela IA para ${input}">`;
+        } else if (input === "") {
+             resultsArea.style.display = 'none';
+        } else {
+            resultsArea.style.display = 'block';
+            pautaCode.innerText = "NÃO ENCONTRADO";
+            pautaTitle.innerText = "Produto não cadastrado no protótipo";
+            pautaDesc.innerText = "No sistema real, a IA tentaria classificar '"+input+"' baseada nas regras gerais de interpretação.";
+            iaImageArea.innerHTML = "<div>Sem Imagem</div>";
+        }
     }
-    else if (descricao.includes("roupa") || descricao.includes("camisa")) {
-        codigo = "6205.20.00";
-        explicacao = "Classificado como vestuário de algodão.";
-        imagem = "https://source.unsplash.com/200x200/?shirt";
-    }
-    else {
-        codigo = "0000.00.00";
-        explicacao = "Mercadoria não identificada. Necessário análise mais detalhada conforme regras do Sistema Harmonizado.";
-        imagem = "https://source.unsplash.com/200x200/?product";
-    }
-
-    document.getElementById("resultado").innerHTML = `
-        <h3>Resultado da Classificação</h3>
-        <p><strong>Código Pautal:</strong> ${codigo}</p>
-        <p><strong>Subposição:</strong> ${codigo}</p>
-        <p><strong>Justificação:</strong> ${explicacao}</p>
-        <img src="${imagem}">
-    `;
-}
-
 </script>
 
 </body>
