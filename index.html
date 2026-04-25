@@ -3,102 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NNVS Online - Classificação Pautal 2024</title>
+    <title>NNVS Online - Classificação 2024</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --sidebar: #0f172a; --accent: #ff6600; --bg: #f8fafc; --white: #ffffff; }
         body { font-family: 'Inter', sans-serif; margin: 0; display: flex; background: var(--bg); height: 100vh; overflow: hidden; }
         nav { width: 260px; background: var(--sidebar); color: white; padding: 20px; display: flex; flex-direction: column; }
         nav h1 { color: var(--accent); font-size: 22px; text-align: center; margin-bottom: 40px; font-weight: 900; }
-        nav a { color: #94a3b8; text-decoration: none; padding: 14px; margin: 5px 0; border-radius: 8px; cursor: pointer; display: block; transition: 0.3s; }
-        nav a.active { background: #1e293b; color: var(--accent); font-weight: bold; }
         main { flex: 1; padding: 40px; overflow-y: auto; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start; }
-        .card { background: var(--white); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card { background: var(--white); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto; }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 8px; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f1f5f9; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: var(--sidebar); color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .res-header { background: var(--sidebar); color: white; padding: 25px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .res-code { font-size: 36px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
-        .res-info-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 15px; }
-        .detail-line { margin-bottom: 12px; font-size: 14px; line-height: 1.6; }
-        .detail-line b { color: #64748b; text-transform: uppercase; font-size: 11px; display: block; }
-        .tax-tag { background: #fff1f2; border-left: 5px solid #ef4444; padding: 15px; border-radius: 4px; margin-top: 20px; font-weight: 900; color: #b91c1c; font-size: 18px; }
+        .btn-main:disabled { opacity: 0.6; cursor: not-allowed; }
+        .res-box { margin-top: 30px; padding: 25px; background: #1e293b; color: white; border-radius: 12px; display: none; border-left: 5px solid var(--accent); }
+        .res-code { color: var(--accent); font-size: 38px; font-weight: 900; margin-bottom: 10px; letter-spacing: 1px; }
+        .res-info { border-top: 1px solid #334155; padding-top: 15px; font-size: 15px; line-height: 1.6; color: #cbd5e1; }
+        .res-info b { color: var(--accent); font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
 <nav>
     <h1>NNVS ONLINE</h1>
-    <a onclick="location.reload()" class="active">Classificar Produto</a>
-    <div style="margin-top: auto; font-size: 11px; color: #64748b; text-align: center;">SISTEMA GRATUITO</div>
+    <div style="margin-top: auto; font-size: 10px; opacity: 0.5; text-align: center; font-weight: bold;">PAUTA ADUANEIRA ANGOLA 2024</div>
 </nav>
 
 <main>
-    <h2 style="margin-bottom: 30px; font-weight: 900; color: var(--sidebar);">Classificar Mercadoria</h2>
-    <div class="dashboard-grid">
-        <div class="card">
-            <div class="form-group">
-                <label>Nome do Produto *</label>
-                <input type="text" id="in_nome" placeholder="Ex: Pneus">
-            </div>
-            <div class="form-group">
-                <label>Descrição Técnica</label>
-                <textarea id="in_desc" rows="3" placeholder="Detalhes do produto..."></textarea>
-            </div>
-            <button class="btn-main" onclick="processar()">CLASSIFICAR COM IA ✨</button>
+    <div class="card">
+        <h2 style="margin-bottom: 25px; color: #0f172a; font-weight: 900;">Classificar Mercadoria</h2>
+        
+        <div class="form-group">
+            <label>Nome do Produto *</label>
+            <input type="text" id="p_nome" placeholder="Ex: Veículo Ligeiro">
+        </div>
+        
+        <div class="form-group">
+            <label>Descrição Técnica / Composição</label>
+            <textarea id="p_desc" rows="3" placeholder="Ex: Motor 2.0, feito de metal, para transporte de pessoas..."></textarea>
         </div>
 
-        <div class="card" id="painel" style="display: none;">
-            <div class="res-header">
-                <div><small>HS CODE</small><div class="res-code" id="out_hscode">----</div></div>
-            </div>
-            <h3 id="out_titulo" style="margin: 20px 0;">--</h3>
-            <div class="res-info-box">
-                <div class="detail-line"><b>Capítulo:</b> <span id="out_cap">--</span></div>
-                <div class="detail-line"><b>Justificativa:</b> <span id="out_just">--</span></div>
-            </div>
-            <div class="tax-tag">TAXA: <span id="out_taxa">0%</span></div>
+        <button class="btn-main" id="btn" onclick="classificar()">CLASSIFICAR COM IA ✨</button>
+
+        <div id="resultado" class="res-box">
+            <b>Código Sugerido (HS CODE)</b>
+            <div id="out_code" class="res-code">----</div>
+            <div id="out_info" class="res-info"></div>
         </div>
     </div>
 </main>
 
 <script>
-    // Usando a sua nova chave gratuita
-    const KEY = "AIzaSyDioKKTF0cQyUk9t_gM3gEJUwU7iTr8158";
+    // INSERIR A CHAVE DO NOVO PROJETO AQUI
+    const CHAVE_API = "gen-lang-client-0049653970"; 
 
-    async function processar() {
-        const nome = document.getElementById('in_nome').value;
-        if(!nome) return alert("Digite o nome!");
+    async function classificar() {
+        const nome = document.getElementById('p_nome').value;
+        if(!nome) return alert("Por favor, digite o nome do produto.");
 
-        document.getElementById('painel').style.display = 'block';
-        document.getElementById('out_hscode').innerText = "A pesquisar...";
+        const btn = document.getElementById('btn');
+        const resBox = document.getElementById('resultado');
+        
+        btn.innerText = "A ANALISAR PAUTA 2024...";
+        btn.disabled = true;
+        resBox.style.display = 'block';
+        document.getElementById('out_code').innerText = "Aguarde...";
+        document.getElementById('out_info').innerText = "";
 
-        const prompt = `Responda apenas em JSON sobre o produto '${nome}' na Pauta Aduaneira de Angola 2024: {"hscode":"","titulo":"","capitulo":"","justificativa":"","taxa":""}`;
+        const prompt = `Aja como perito aduaneiro angolano. Classifique o produto '${nome}' com base na Pauta Aduaneira de Angola 2024. Responda APENAS um objeto JSON com os campos: hscode, descricao_tecnica, taxa_importacao.`;
 
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CHAVE_API}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
-            
-            const d = await r.json();
-            
-            // Limpeza da resposta para evitar erro de formato JSON
-            let t = d.candidates[0].content.parts[0].text;
-            t = t.replace(/```json|```/g, "").trim();
-            const res = JSON.parse(t);
 
-            document.getElementById('out_hscode').innerText = res.hscode;
-            document.getElementById('out_titulo').innerText = res.titulo;
-            document.getElementById('out_cap').innerText = res.capitulo;
-            document.getElementById('out_just').innerText = res.justificativa;
-            document.getElementById('out_taxa').innerText = res.taxa;
+            const data = await response.json();
+
+            if(data.error) {
+                throw new Error(data.error.message);
+            }
+
+            // Limpa a resposta da IA caso ela envie marcas de código markdown
+            let texto = data.candidates[0].content.parts[0].text;
+            texto = texto.replace(/```json|```/g, "").trim();
+            
+            const json = JSON.parse(texto);
+
+            document.getElementById('out_code').innerText = json.hscode || "Não encontrado";
+            document.getElementById('out_info').innerHTML = `
+                <b>Descrição Técnica</b> ${json.descricao_tecnica || "N/A"}<br><br>
+                <b>Direitos Aduaneiros</b> ${json.taxa_importacao || "0%"}
+            `;
+
         } catch (e) {
-            document.getElementById('out_hscode').innerText = "Erro!";
-            alert("A Google bloqueou a chave por segurança. Tente novamente em 1 minuto.");
+            console.error(e);
+            document.getElementById('out_code').innerText = "Erro";
+            document.getElementById('out_info').innerText = "Houve um problema na comunicação. Verifique se a sua chave está ativa no Google AI Studio.";
+        } finally {
+            btn.innerText = "CLASSIFICAR COM IA ✨";
+            btn.disabled = false;
         }
     }
 </script>
