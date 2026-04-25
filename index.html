@@ -9,25 +9,20 @@
         :root { --sidebar: #0f172a; --accent: #ff6600; --bg: #f8fafc; --white: #ffffff; }
         body { font-family: 'Inter', sans-serif; margin: 0; display: flex; background: var(--bg); height: 100vh; overflow: hidden; }
         
-        /* Menu Lateral Estilo Profissional */
         nav { width: 260px; background: var(--sidebar); color: white; padding: 20px; display: flex; flex-direction: column; }
         nav h1 { color: var(--accent); font-size: 22px; text-align: center; margin-bottom: 40px; font-weight: 900; }
         nav a { color: #94a3b8; text-decoration: none; padding: 14px; margin: 5px 0; border-radius: 8px; cursor: pointer; display: block; transition: 0.3s; }
         nav a.active { background: #1e293b; color: var(--accent); font-weight: bold; }
 
-        /* Área de Trabalho Principal */
         main { flex: 1; padding: 40px; overflow-y: auto; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; align-items: start; }
         .card { background: var(--white); padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         
-        /* Formulário de Entrada */
         .form-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 8px; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f1f5f9; box-sizing: border-box; font-size: 14px; }
         .btn-main { background: var(--sidebar); color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn-main:hover { background: #1e293b; transform: translateY(-2px); }
 
-        /* Painel de Resultados (Estilo Replit) */
         .res-header { background: var(--sidebar); color: white; padding: 25px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
         .res-code { font-size: 36px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
         .res-info-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 15px; }
@@ -89,7 +84,7 @@
 </main>
 
 <script>
-    const API_KEY = "AIzaSyD_zU5TAgaExvLgP0F7sOUJR5YV4LdYfJI"; // Chave fornecida pelo usuário
+    const API_KEY = "AIzaSyD_zU5TAgaExvLgP0F7sOUJR5YV4LdYfJI"; 
 
     function ir(aba) {
         document.getElementById('view-classificar').style.display = aba === 'classificar' ? 'block' : 'none';
@@ -108,31 +103,22 @@
         painel.style.display = 'block';
         document.getElementById('out_hscode').innerText = "Analisando...";
 
-        // Prompt especializado na Pauta Aduaneira de Angola 2024
-        const prompt = `Aja como um perito aduaneiro angolano. Classifique a mercadoria abaixo estritamente pela Pauta Aduaneira de Angola 2024 e Regras Gerais de Interpretação (RGI).
+        const prompt = `Aja como um perito aduaneiro angolano. Classifique a mercadoria abaixo estritamente pela Pauta Aduaneira de Angola 2024. 
         Produto: ${nome} | Descrição: ${desc} | Composição: ${comp} | Finalidade: ${uso}
         Retorne APENAS um JSON com os campos: hscode, titulo_tecnico, capitulo, posicao, justificativa, taxa_importacao.`;
 
         try {
-            const resp = const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        contents: [{
-            parts: [{
-                text: prompt
-            }]
-        }]
-    })
-});
+            const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
             
             const data = await resp.json();
-            const texto = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
+            let texto = data.candidates[0].content.parts[0].text;
+            texto = texto.replace(/```json|```/g, "").trim();
             const res = JSON.parse(texto);
 
-            // Preenchimento dos dados reais da IA
             document.getElementById('out_hscode').innerText = res.hscode;
             document.getElementById('out_titulo').innerText = res.titulo_tecnico;
             document.getElementById('out_cap').innerText = res.capitulo;
