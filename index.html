@@ -84,7 +84,8 @@
 </main>
 
 <script>
-    const API_KEY = "AIzaSyD_zU5TAgaExvLgP0F7sOUJR5YV4LdYfJI"; 
+    // Chave de API atualizada e corrigida
+    const API_KEY = "AIzaSyABVLYMKNC8rGQmBx8u04R4WVcrTLAxhJ0"; 
 
     function ir(aba) {
         document.getElementById('view-classificar').style.display = aba === 'classificar' ? 'block' : 'none';
@@ -99,13 +100,14 @@
         const comp = document.getElementById('in_comp').value;
         const uso = document.getElementById('in_uso').value;
         
+        if(!nome) { alert("Por favor, digite o nome do produto."); return; }
+
         const painel = document.getElementById('painelResultados');
         painel.style.display = 'block';
         document.getElementById('out_hscode').innerText = "Analisando...";
 
-        const prompt = `Aja como um perito aduaneiro angolano. Classifique a mercadoria abaixo estritamente pela Pauta Aduaneira de Angola 2024. 
-        Produto: ${nome} | Descrição: ${desc} | Composição: ${comp} | Finalidade: ${uso}
-        Retorne APENAS um JSON com os campos: hscode, titulo_tecnico, capitulo, posicao, justificativa, taxa_importacao.`;
+        const prompt = `Aja como um perito aduaneiro angolano. Classifique a mercadoria '${nome}' estritamente pela Pauta Aduaneira de Angola 2024. Detalhes: ${desc}, ${comp}, ${uso}. 
+        Retorne APENAS um JSON: {"hscode":"","titulo_tecnico":"","capitulo":"","posicao":"","justificativa":"","taxa_importacao":""}`;
 
         try {
             const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
@@ -115,19 +117,22 @@
             });
             
             const data = await resp.json();
+            
+            if(!data.candidates) { throw new Error("API negou o acesso. Verifique o faturamento."); }
+
             let texto = data.candidates[0].content.parts[0].text;
             texto = texto.replace(/```json|```/g, "").trim();
             const res = JSON.parse(texto);
 
-            document.getElementById('out_hscode').innerText = res.hscode;
-            document.getElementById('out_titulo').innerText = res.titulo_tecnico;
-            document.getElementById('out_cap').innerText = res.capitulo;
-            document.getElementById('out_pos').innerText = res.posicao;
-            document.getElementById('out_just').innerText = res.justificativa;
-            document.getElementById('out_taxa').innerText = res.taxa_importacao;
+            document.getElementById('out_hscode').innerText = res.hscode || "N/A";
+            document.getElementById('out_titulo').innerText = res.titulo_tecnico || "N/A";
+            document.getElementById('out_cap').innerText = res.capitulo || "N/A";
+            document.getElementById('out_pos').innerText = res.posicao || "N/A";
+            document.getElementById('out_just').innerText = res.justificativa || "N/A";
+            document.getElementById('out_taxa').innerText = res.taxa_importacao || "0%";
         } catch (e) {
             document.getElementById('out_hscode').innerText = "Erro na Busca";
-            console.error(e);
+            console.error("Erro detalhado:", e);
         }
     }
 </script>
